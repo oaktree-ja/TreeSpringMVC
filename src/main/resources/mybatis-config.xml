@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+  <configuration>
+  	
+  	<!--MyBatis 가 직접 연결 풀과 트랜잭션을 관리, 스프링 없이 독립적으로 사용 가능
+  	<environment id="development">
+  		<transactionManager type="JDBC"></transactionManager>
+		<dataSource type="POOLED"></dataSource>
+  	</environment>
+  	 -->
+  	 <typeAliases>
+  	 	<typeAlias type="com.tree.spring.member.domain.MemberVO" alias="Member"/>
+  	 </typeAliases>
+  	 <!-- mapper.xml이 만들어 질때마다 추가를 해야 한다  -->
+  	 <mappers>
+  	 	<mapper resource="mappers/member-mapper.xml"/>
+  	 </mappers>
+  
+  </configuration> 
+  
