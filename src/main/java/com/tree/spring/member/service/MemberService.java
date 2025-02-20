@@ -16,7 +16,7 @@ public interface MemberService {
 	 * @return int
 	 */
 	
-	int updatetMember(MemberVO member);
+	int updateMember(MemberVO member);
 	/**
 	 *회원 정보 삭제 Service
 	 * @param member

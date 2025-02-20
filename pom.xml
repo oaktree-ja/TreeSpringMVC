@@ -65,6 +65,21 @@
 	    <artifactId>commons-dbcp</artifactId>
 	    <version>1.4</version>
 	</dependency>
+	
+	<!-- https://mvnrepository.com/artifact/javax.servlet.jsp.jstl/jstl -->
+	<dependency>
+	    <groupId>javax.servlet</groupId>
+	    <artifactId>jstl</artifactId>
+	    <version>1.2</version>
+	</dependency>
+
+	<!-- https://mvnrepository.com/artifact/javax.servlet.jsp.jstl/jstl-api -->
+	<dependency>
+	    <groupId>javax.servlet.jsp.jstl</groupId>
+	    <artifactId>jstl-api</artifactId>
+	    <version>1.2</version>
+	</dependency>
+	
 		
 	
   </dependencies>

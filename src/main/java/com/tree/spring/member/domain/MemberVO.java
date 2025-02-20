@@ -29,6 +29,18 @@ public class MemberVO {
 	}
 	
 	
+	
+	public MemberVO(String memberId, String memberPw, String memberEmail, String memberPhone, String memberAddress) {
+		super();
+		this.memberId = memberId;
+		this.memberPw = memberPw;
+		this.memberEmail = memberEmail;
+		this.memberPhone = memberPhone;
+		this.memberAddress = memberAddress;
+	}
+
+
+
 	public MemberVO(String memberId, String memberPw) {
 		super();
 		this.memberId = memberId;

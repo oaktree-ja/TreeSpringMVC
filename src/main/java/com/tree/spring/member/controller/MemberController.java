@@ -6,6 +6,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -67,7 +68,8 @@ public class MemberController {
 	public String memberLogin(
 			@RequestParam("memberId") String memberId
 			,@RequestParam("memberPw") String memberPw
-			,HttpSession session){
+			,HttpSession session
+			,Model model){
 				try {
 					MemberVO member = new MemberVO(memberId, memberPw);
 					member = mService.selectOneByLogin(member);
@@ -76,12 +78,101 @@ public class MemberController {
 						session.setAttribute("memberId", member.getMemberId());
 						return "redirect:/";
 					}else {
+						model.addAttribute("errorMsg","존재하지 않는 정보입니다");
 						return "common/error";
 					}
 				} catch (Exception e) {
+					model.addAttribute("errorMsg",e.getMessage());
 					return "common/error";
 				}
 				
 			}
+	@RequestMapping(value="/member/logout",method=RequestMethod.GET)		
+	public String memberLogout(HttpSession session) {
+		if(session !=null) {
+			session.invalidate();
+		}
+		return "redirect:/";
+	}
+	@RequestMapping(value="/member/detail",method=RequestMethod.GET)
+	public String memberMyPage(HttpSession session, Model model) {
+		try {
+			String memberId =(String) session.getAttribute("memberId");
+			MemberVO member =mService.selectOneById(memberId);
+			if(member !=null) {
+				//request.setAttribute("member",member); 원래는 이렇게 받았었는데  model을 활용하여 다른 방식으로 받는다 
+				model.addAttribute("member",member); //기능을 아래 request.getRequestDispatcher와 동일하게 하는 것 
+				//request.getRequestDispatcher("/WEB-INF/views/member/detail.jsp").forward(req,res);
+				return "member/detail";
+			}else {
+				model.addAttribute("errorMsg","존재하지 않는 정보입니다");
+				return "common/error";
+			}
+				
+		} catch (Exception e) {
+			model.addAttribute("errorMsg",e.getMessage());
+			return "common/error";
+		}
+	}
+	@RequestMapping(value="/member/delete", method=RequestMethod.GET)
+	public String memberDelete(HttpSession session, Model model) {
+		try {
+			String memberId = (String) session.getAttribute("memberId");
+			int result =mService.deleteMember(memberId);
 			
+			if(result>0) {
+				//로그아웃
+				return "redirect:/member/logout";
+			}else {
+				model.addAttribute("errorMsg","존재하지 않는 정보입니다");
+				return "common/error";
+			}
+			
+		} catch (Exception e) {
+			model.addAttribute("errorMsg",e.getMessage());
+			return "common/error";
+		}
+	}
+	@RequestMapping(value="/member/update", method=RequestMethod.GET)
+	public String memberUpdateForm(HttpSession session, Model model) {
+		try {
+			String memberId = (String) session.getAttribute("memberId");;
+			MemberVO member=mService.selectOneById(memberId);
+			if(member !=null) {
+				model.addAttribute("member", member);
+				return "member/update";
+			}else {
+				model.addAttribute("errorMsg","존재하지 않는 정보입니다");
+				return "common/error";
+			}
+		} catch (Exception e) {
+			model.addAttribute("errorMsg",e.getMessage());
+			return "common/error";
+		}
+	}
+	@RequestMapping(value="/member/update", method=RequestMethod.POST)
+	public String memberUpdate(@RequestParam("memberId")String memberId
+			,@RequestParam("memberPw")String memberPw
+			,@RequestParam("memberEmail")String memberEmail
+			,@RequestParam("memberPhone")String memberPhone
+			,@RequestParam("memberAddress")String memberAddress
+			,Model model) {
+		try {
+			MemberVO member= new MemberVO(memberId, memberPw,memberEmail,memberPhone,memberAddress);
+			int result = mService.updateMember(member);
+			if(result>0) {
+				return"redirect:/member/detail";
+			}else {
+				model.addAttribute("errorMsg","서비스가 완료되지 않았습니다");
+				return "common/error";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();// 콘솔창에 오류 메시지 나오게 하는 명령문
+			model.addAttribute("errorMsg",e.getMessage());
+			return "common/error";
+		}
+		
+	}
+	
+	
 }

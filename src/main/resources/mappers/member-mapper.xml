@@ -4,20 +4,25 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
   <mapper namespace="MemberMapper">
-  	<resultMap type="Member" id="memberResultMap">
-  		<id property="memberId" column="MEMBER_ID"></id>
-  			<result property="memberPw" column="MEMBER_PW"></result>
-  			<result property="memberName" column="MEMBER_Name"></result>
-  			<result property="memberAge" column="MEMBER_AGE"></result>
-  			<result property="memberGender" column="MEMBER_GENDER"></result>
-  			<result property="memberEmail" column="MEMBER_EMAIL"></result>
-  			<result property="memberPhone" column="MEMBER_PHONE"></result>
-  			<result property="memberAddress" column="MEMBER_ADDRESS"></result>
-  			<result property="memberDate" column="MEMBER_DATE"></result>
-  			<result property="modifyDate" column="MODIFY_DATE"></result>
-  			<result property="memberYn" column="MEMBER_YN"></result>
-  			
-  	</resultMap>
+	  <resultMap type="Member" id="loginResultMap">
+	  		<id property="memberId" column="MEMBER_ID"></id>
+	  			<result property="memberPw" column="MEMBER_PW"></result>
+	  			<result property="memberName" column="MEMBER_Name"></result>
+	  	</resultMap>
+	  	<resultMap type="Member" id="memberResultMap">
+	  		<id property="memberId" column="MEMBER_ID"></id>
+	  			<result property="memberPw" column="MEMBER_PW"></result>
+	  			<result property="memberName" column="MEMBER_Name"></result>
+	  			<result property="memberAge" column="MEMBER_AGE"></result>
+	  			<result property="memberGender" column="MEMBER_GENDER"></result>
+	  			<result property="memberEmail" column="MEMBER_EMAIL"></result>
+	  			<result property="memberPhone" column="MEMBER_PHONE"></result>
+	  			<result property="memberAddress" column="MEMBER_ADDRESS"></result>
+	  			<result property="memberDate" column="MEMBER_DATE"></result>
+	  			<result property="modifyDate" column="MODIFY_DATE"></result>
+	  			<result property="memberYn" column="MEMBER_YN"></result>
+	  	</resultMap>
+
   	<insert id="insertMember">
   		INSERT INTO MEMBER_TBL
   		VALUES(#{memberId},#{memberPw},#{memberName},#{memberAge},#{memberGender},#{memberEmail},#{memberPhone},#{memberAddress},DEFAULT,DEFAULT,DEFAULT)
@@ -26,5 +31,19 @@
   	<select id="selectOneByLogin" resultMap="memberResultMap">
   		SELECT * FROM MEMBER_TBL WHERE MEMBER_ID = #{memberId} AND MEMBER_PW=#{memberPw}
   	</select>
+  	
+  	<select id="selectOneById" resultMap="memberResultMap">
+  		SELECT * FROM MEMBER_TBL WHERE MEMBER_ID =#{memberId}
+  	</select>
+  	
+  	<update id="updateMember">
+  		update member_tbl set MEMBER_PW=#{memberPw}, member_email= #{memberEmail}, member_phone=#{memberPhone},member_address=#{memberAddress},modify_date=default where member_id = #{memberId}
+  	</update>
+  	
+  	<delete id="deleteMember">
+  	 delete from member_tbl where member_id = #{memberId}
+  	</delete>
+  	
+  
   </mapper>
  

@@ -18,7 +18,7 @@ public interface MemberStore {
 	 * @param MemberVO
 	 * @return int
 	 */
-	int updatetMember(SqlSession session,MemberVO member);
+	int updateMember(SqlSession session,MemberVO member);
 	/**
 	 *회원 정보 삭제 Store
 	 * @param SqlSession
