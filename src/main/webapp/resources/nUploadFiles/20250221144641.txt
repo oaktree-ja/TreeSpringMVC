@@ -1,0 +1,138 @@
+올해 취업에 성공한 팔용자씨는 공부하며 정리한 내용을 보고 MyBatis Framework를 이용하여 웹어플리케이션을 구현하려고 한다. 팔용자씨는 배웠던 내용을 상기하면서 정리한 내용을 보았다. 하지만 부족한 부분이 있어 혼자의 힘으로 하기가 어려웠다. 이것을 본 회사 선배는 정리한 내용을 보며 MyBatis Framework를 적용할 수 있도록 도움을 받아 설정하고 코딩하였지만 제대로 동작하지 않았다. Framework가 제대로 동작하지 않은 원인과 원인으로 인해 발생되는 문제점 그리고 해결방안을 작성하시오.
+단, 테이블을 만들기 위한 Query문은 다음과 같다.
+
+CREATE TABLE MEMBER(
+	USER_NO 	NUMBER PRIMARY KEY,
+	USER_ID 	VARCHAR2(20) NOT NULL,
+	USER_PW 	VARCHAR2(20) NOT NULL,
+	USER_NAME 	VARCHAR2(20) NOT NULL,
+	USER_ADDR 	VARCHAR(50) NOT NULL,
+	REG_DATE 	DATE DEFAULT SYSDATE
+);
+
+CREATE SEQUENCE SEQ_MEMBER;
+
+A. MyBatis Framework를 사용하기 위해 라이브러리를 프로젝트에서 import한다.
+
+요구사항1) import할 파일명과 프로젝트 내에 import할 폴더경로를 서술하시오.
+- 파일명 : mybatis-3.4.7.jar, 경로 : WEB-INF 아래 lib 폴더
+
+B. org.kh.member.model.vo 패키지 밑에 MemberVO 클래스, mapper 아래 member 폴더 밑에 member-mapper.xml 파일을 생성하고 resources 폴더 아래 mybatis-config.xml 리소스 파일을 생성한다.
+
+- MemberVO 클래스
+package org.kh.member.model.vo;
+
+import java.sql.Date;​
+
+public class MemberVO {
+    private int userNo;
+    private String userId;
+    private String userPw;
+    private String userName;​
+    private String userAddr;​​
+    private Date regDate;
+    ....이하 생략(문제없음)....
+}
+
+요구사항2) 설정파일에 mapper xml파일을 등록하고 VO객체의 별칭을 등록한다.
+
+- mybatis-config.xml 파일
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" >
+<configuration>
+<!-- 별칭 등록 -->
+<typeAliases>
+	<typeAlias type="org.kh.member.model.vo.MemberVO" alias="member"/>
+</typeAliases>
+<environments default="development">
+	<environment id="development">
+		<transactionManager type="JDBC"/>
+		<dataSource type="POOLED">
+			<property name="driver" value="oracle.jdbc.driver.OracleDriver"/>
+			<property name="url" 	value="jdbc:oracle:thin:@127.0.0.1:1521:xe"/>
+			<property name="username" value="MYBATIS"/>
+			<property name="password" value="MYBATIS"/>
+		</dataSource>
+	</environment>
+</environments>
+<!-- 회원정보(member)에서 사용될 Mapper 파일 등록 -->
+<mappers>
+	<mapper resource="mapper/member/member-mapper.xml"/>
+</mappers>
+</configuration>
+
+C. SqlSessionTemplate 클래스를 만들어 SqlSession 공통모듈을 구성한다.
+
+요구사항3) SqlSession을 생성하기 위한 코드를 작성하시오
+- SqlSessionTemplate 클래스
+public class SqlSessionTemplate {
+	public static SqlSession getSqlSession() {
+		SqlSession session = null;
+		String resource = "mybatis-config.xml";
+		try {
+			// 해당 리소스 경로(xml파일)로 input 스트림 생성
+			InputStream is = Resources.getResourceAsStream(resource);
+			// SqlSessionFactory를 만들 수 있는 팩토리 빌더 생성
+			SqlSessionFactoryBuilder builder = new SqlSessionFactoryBuilder();
+			// 팩토리 빌드를 가지고 실제 사용할 SqlSessionFactory 생성
+			SqlSessionFactory factory = builder.build(is);
+			// SqlSessionFactory를 가지고 sqlSession 생성(false값은 autoCommit을 안한다는 뜻)
+			session = factory.openSession(false);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	return session; // 생성된 SqlSession 리턴
+	}
+}
+
+D. 생성한 테이블에 회원을 추가할 수 있는 Query문을 mapper에 작성한다.
+
+요구사항4) xml 태그를 이용하여 Query문을 작성하시오(단, 네임스페이스는 mybatis, id는 insertMember로 한다.)
+- member-mapper.xml 파일
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="mybatis">
+	<insert id="insertMember" parameterType="member">
+		INSERT INTO MEMBER VALUES (SEQ_MEMBER.NEXTVAL, #{memberId}, #{memberPw}, #{memberName}, #{memberAddr}, DEFAULT)
+	</insert>
+</mapper>
+
+
+E. Service 클래스에서 공통으로 만들어 놓은 SqlSession을 이용하여 연결을 생성한 후 커밋과 롤백을 처리한다.
+
+요구사항5) Service 클래스를 위의 요구사항에 맞게 작성하시오.
+
+- MemberServiceImpl 클래스
+public class MemberServiceImpl{
+	MemberDAOLogic memberDAO = new MemberDAOLogic();
+
+	public int insertMember(MemberVO mOne) {
+
+		SqlSession session = SqlSessionTemplate.getSqlSession();
+		int result = memberDAO.insertMember(session, mOne);
+		if(result>0) {
+			session.rollback();
+		}else {
+			session.commit();
+		}
+		session.close();
+		return result;
+	}
+}
+
+
+F. DAO 클래스를 작성하고 Service에서 넘겨준 Session을 이용하여 Database에서 쿼리문을 실행한다.
+
+요구사항6) Service에서 넘겨준 Session을 이용하여 Database에서 쿼리문을 실행한다.
+
+- MemberDAO 클래스
+
+public class MemberDAO {
+
+	public int insertMember(SqlSession session, MemberVO mOne) {
+		int result = session.insert("mybatis.registerMember", mOne);
+		System.out.println("member@MemberDAO="+result);
+		return result;
+	}
+
+}

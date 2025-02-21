@@ -4,12 +4,14 @@ import java.io.File;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -92,6 +94,57 @@ public class NoticeController {
 		}
 		
 	}
+	
+	@RequestMapping(value="/notice/update",method=RequestMethod.POST)
+	public String updateNotice(@RequestParam("noticeNo") int noticeNo
+			,@RequestParam("noticeSubject") String noticeSubject
+			,@RequestParam("noticeContent") String noticeContent
+			,@RequestParam("reloadFile") MultipartFile reloadFile
+			,Model model,HttpSession session) {
+		try {
+			String noticeFilename = reloadFile.getOriginalFilename();
+			String noticeFileRename = null;
+			String noticeFilepath=null;
+			if(noticeFilename !=null) {
+				String ext = noticeFilename.substring(noticeFilename.lastIndexOf(".")+1);
+				noticeFileRename = UUID.randomUUID()+"."+ext;
+				String folderPath = session.getServletContext().getRealPath("/resources/nUploadFiles");
+				String savePath = folderPath +"\\" +noticeFileRename;
+				reloadFile.transferTo(new File(savePath));
+				noticeFilepath ="/resources/nUploadFiles/"+noticeFileRename;
+				
+			}
+			NoticeVO notice = new NoticeVO(noticeNo, noticeSubject, noticeContent, noticeFilename, noticeFileRename, noticeFilepath);
+			int result = nService.updateNotice(notice);
+			if(result >0) {
+				return"redirect:/notice/detail?noticeNo="+notice.getNoticeNo();
+			}else {
+				model.addAttribute("errorMsg","수정이 완료되지 않았습니다");
+				return "common/error";
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("errorMsg", e.getMessage());
+			return "common/error";
+		}
+	}
+	
+	@RequestMapping(value="/notice/delete",method=RequestMethod.GET)
+	public String deleteNotice(
+			@RequestParam("noticeNo")int noticeNo
+			,Model model) {
+		try {
+			int result =nService.deleteNotice(noticeNo);
+			return "redirect:/notice/list";
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("errorMsg", e.getMessage());
+			return "common/error";
+		}
+		
+	}
+	
 	
 	@RequestMapping(value="/notice/list", method=RequestMethod.GET)
 	public String showNoticeList(

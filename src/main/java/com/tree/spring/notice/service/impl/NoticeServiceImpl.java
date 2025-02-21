@@ -48,4 +48,16 @@ public class NoticeServiceImpl implements NoticeService{
 		return notice;
 	}
 
+	@Override
+	public int updateNotice(NoticeVO notice) {
+		int result = nStore.updateNotice(session, notice);
+		return result;
+	}
+
+	@Override
+	public int deleteNotice(int noticeNo) {
+		int result = nStore.deleteNotice(session, noticeNo);
+		return result;
+	}
+
 }

@@ -17,6 +17,10 @@ public interface NoticeStore {
 
 	NoticeVO selectOneByNo(SqlSession session, int noticeNo);
 
+	int updateNotice(SqlSession session, NoticeVO notice);
+
+	int deleteNotice(SqlSession session, int noticeNo);
+
 	
 	
 	

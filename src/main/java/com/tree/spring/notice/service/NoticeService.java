@@ -14,6 +14,10 @@ public interface NoticeService {
 
 	NoticeVO selectOneByNo(int noticeNo);
 
+	int updateNotice(NoticeVO notice);
+
+	int deleteNotice(int noticeNo);
+
 	
 	
 	

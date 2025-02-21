@@ -34,16 +34,22 @@
 			</tr>
 			<tr>
 				<th>첨부파일</th>
-				<td><a href="..${notice.noticeFilepath }"download>${notice.noticeFilename }</a></td>
+				<td><a href="..${notice.noticeFilepath }" download>${notice.noticeFilename }</a></td>
 			</tr>
 		</table>
 		<div>
-			<button type= "button" onclick="showModifyForm(${notice.noticeNo })";>수정하기</button>
-			<button type= "button">삭제하기</button>
+			<button type= "button" onclick="showModifyForm(${notice.noticeNo });">수정하기</button>
+			<button type= "button" onclick ="deleteConfirm(${notice.noticeNo});">삭제하기</button>
 			<button type = "button" id="listBtn">목록으로</button>
 			<button type= "button" onclick="goBack();">뒤로가기</button>
 		</div>
 		<script>
+		function deleteConfirm(noticeNo){
+			var check = confirm("정말로 삭제하겠습니까?");
+			if(check){
+				location.href="/notice/delete?noticeNo="+noticeNo;
+			}
+		}
 			function showModifyForm(noticeNo){
 				location.href ="/notice/update?noticeNo="+ noticeNo;
 			}
