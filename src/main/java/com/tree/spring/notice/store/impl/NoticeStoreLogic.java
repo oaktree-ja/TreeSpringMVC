@@ -30,6 +30,20 @@ public class NoticeStoreLogic implements NoticeStore{
 		return nList;
 	}
 
+	@Override
+	public int getTotalCount(SqlSession session) {
+		int totalCount = session.selectOne("NoticeMapper.getTotalCount");
+		return totalCount;
+	}
+
+	@Override
+	public NoticeVO selectOneByNo(SqlSession session, int noticeNo) {
+		NoticeVO notice = session.selectOne("NoticeMapper.selectOneByNo",noticeNo);
+		return notice;
+	}
+	
+	
+	
 
 
 }

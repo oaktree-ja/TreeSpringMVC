@@ -25,7 +25,7 @@
 
   	<insert id="insertMember">
   		INSERT INTO MEMBER_TBL
-  		VALUES(#{memberId},#{memberPw},#{memberName},#{memberAge},#{memberGender},#{memberEmail},#{memberPhone},#{memberAddress},DEFAULT,DEFAULT,DEFAULT)
+  		VALUES(#{memberId},#{memberPw},#{memberName},#{memberAge},#{memberGender},#{memberEmail},#{memberPhone},#{memberAddress},DEFAULT,DEFAULT,DEFAULT,DEFAULT)
   	</insert>
   	
   	<select id="selectOneByLogin" resultMap="memberResultMap">

@@ -13,6 +13,10 @@ public interface NoticeStore {
 
 	List<NoticeVO> selectList(SqlSession session,int currentPage);
 
+	int getTotalCount(SqlSession session);
+
+	NoticeVO selectOneByNo(SqlSession session, int noticeNo);
+
 	
 	
 	

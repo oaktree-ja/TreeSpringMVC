@@ -36,4 +36,16 @@ public class NoticeServiceImpl implements NoticeService{
 		return nList;
 	}
 
+	@Override
+	public int getTotalcount() {
+		int totalCount = nStore.getTotalCount(session);
+		return totalCount;
+	}
+
+	@Override
+	public NoticeVO selectOneByNo(int noticeNo) {
+		NoticeVO notice = nStore.selectOneByNo(session, noticeNo);
+		return notice;
+	}
+
 }

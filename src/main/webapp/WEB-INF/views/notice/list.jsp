@@ -29,19 +29,29 @@
 			<c:forEach items="${nList }" var="notice" varStatus="i">
 				<tr>
 					<td>${i.count }</td>
-					<td>${notice.noticeSubject}</td>
+					<td><a href ="/notice/detail?noticeNo=${notice.noticeNo }">${notice.noticeSubject}</a></td>
 					<td>${notice.noticeWriter }</td>
 					<td>${notice.noticeDate }</td>
-					<td>${notice.noticeFilename}</td>
+					<c:if test="${not empty notice.noticeFilename}">
+						<td>o</td> <!-- 첨부파일이 있을때 표시  -->
+					</c:if>
+					<c:if test="${empty notice.noticeFilename}">
+						<td>x</td> <!-- 첨부파일이 없을때 표시  -->
+					</c:if>
+					
 				</tr>
 			</c:forEach>
 			<tr>
 				<td colspan="5" align="center">
+					<c:if test="${startNavi ne 1}">
 					<a href="/notice/list?page=">이전</a>
-					<c:forEach begin="1" end="5" var="p">
+					</c:if>
+					<c:forEach begin="${startNavi}" end="${endNavi}" var="p">
 						<a href="/notice/list?page=${p}">${p}</a>
 					</c:forEach>	
-					<a href="/notice/list?page=6">다음</a>
+					<c:if test="${endNavi ne maxPage}">
+					<a href="/notice/list?page=${endNavi+1}">다음</a>
+					</c:if>
 				</td>
 			
 			</tr>
