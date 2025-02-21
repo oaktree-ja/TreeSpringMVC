@@ -10,12 +10,19 @@
 		<dataSource type="POOLED"></dataSource>
   	</environment>
   	 -->
+  	 <!--NULL일때 NULL 로 인식하도록 함   -->
+  	 <settings>
+  	 	<setting name="jdbcTypeForNull" value="NULL"/>
+  	 </settings>
+  	 <!-- VO가 만들어 질때마다 추가  -->
   	 <typeAliases>
   	 	<typeAlias type="com.tree.spring.member.domain.MemberVO" alias="Member"/>
+		<typeAlias type="com.tree.spring.notice.domain.NoticeVO" alias="Notice"/> 	 
   	 </typeAliases>
   	 <!-- mapper.xml이 만들어 질때마다 추가를 해야 한다  -->
   	 <mappers>
   	 	<mapper resource="mappers/member-mapper.xml"/>
+  	 	<mapper resource="mappers/notice-mapper.xml"/>
   	 </mappers>
   
   </configuration> 

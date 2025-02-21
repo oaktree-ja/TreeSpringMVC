@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="NoticeMapper">
+  	<resultMap type="Notice" id= "noticeResultMap">
+  		<id property ="noticeNo" column="NOTICE_NO"></id>
+  		<result property ="noticeSubject" column="NOTICE_SUBJECT"/>
+  		<result property ="noticeContent" column="NOTICE_CONTENT"/>
+  		<result property ="noticeWriter" column="NOTICE_WRITER"/>
+  		<result property ="noticeFilename" column="NOTICE_FILENAME"/>
+  		<result property ="noticeFileRename" column="NOTICE_FILERENAME"/>
+  		<result property ="noticeFilepath" column="NOTICE_FILEPATH"/>
+  		<result property ="noticeDate" column="NOTICE_DATE"/>
+  		<result property ="updateDate" column="UPDATE_DATE"/>
+  		<result property ="noticeCount" column="NOTICE_COUNT"/>
+  		<result property ="noticeYn" column="NOTICE_YN"/>
+  		
+  	</resultMap>
+  	<insert id="insertNotice">
+  		insert into notice_tbl
+  		values(seq_notice_no.nextval ,#{noticeSubject},#{noticeContent},#{noticeWriter},#{noticeFilename},#{noticeFileRename},#{noticeFilepath},
+  		default,default,default,default)
+  	</insert>
+  	<select id="selectList" resultMap="noticeResultMap">
+  		SELECT * FROM NOTICE_TBL ORDER BY NOTICE_NO DESC
+  	</select>
+  	
+  	
+  </mapper>

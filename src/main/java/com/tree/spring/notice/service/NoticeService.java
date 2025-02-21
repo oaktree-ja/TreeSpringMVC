@@ -1,5 +1,15 @@
 package com.tree.spring.notice.service;
 
-public class NoticeService {
+import java.util.List;
 
+import com.tree.spring.notice.domain.NoticeVO;
+
+public interface NoticeService {
+	
+	int insertNotice(NoticeVO notice);
+
+	List<NoticeVO> selectList(int currentPage); 
+	
+	
+	
 }

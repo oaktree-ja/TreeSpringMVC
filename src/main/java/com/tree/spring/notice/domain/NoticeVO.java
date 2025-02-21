@@ -2,6 +2,8 @@ package com.tree.spring.notice.domain;
 
 import java.sql.Timestamp;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class NoticeVO {
 	private int noticeNo;
 	private String noticeSubject;
@@ -14,12 +16,31 @@ public class NoticeVO {
 	private Timestamp updateDate;
 	private int noticeCount;
 	private String noticeYn;
-	
+	private MultipartFile uploadFile;
 	
 	public NoticeVO() {
 		super();
 	}
-
+	
+	public NoticeVO(String noticeSubject, String noticeContent, String noticeWriter) {
+		super();
+		this.noticeSubject = noticeSubject;
+		this.noticeContent = noticeContent;
+		this.noticeWriter = noticeWriter;
+	}
+	
+	
+	
+	public NoticeVO(String noticeSubject, String noticeContent, String noticeWriter, String noticeFilename,
+			String noticeFileRename, String noticeFilepath) {
+		super();
+		this.noticeSubject = noticeSubject;
+		this.noticeContent = noticeContent;
+		this.noticeWriter = noticeWriter;
+		this.noticeFilename = noticeFilename;
+		this.noticeFileRename = noticeFileRename;
+		this.noticeFilepath = noticeFilepath;
+	}
 
 	public int getNoticeNo() {
 		return noticeNo;
@@ -74,15 +95,22 @@ public class NoticeVO {
 	public String getNoticeYn() {
 		return noticeYn;
 	}
-
-
-	@Override
-	public String toString() {
-		return "NoticeVO [noticeNo=" + noticeNo + ", noticeSubject=" + noticeSubject + ", noticeContent="
-				+ noticeContent + ", noticeWriter=" + noticeWriter + ", noticeFilename=" + noticeFilename
-				+ ", noticeFileRename=" + noticeFileRename + ", noticeFilepath=" + noticeFilepath + ", noticeCount="
-				+ noticeCount + ", noticeYn=" + noticeYn + "]";
+	
+		public MultipartFile getUploadFile() {
+		return uploadFile;
 	}
+		
+		@Override
+		public String toString() {
+			return "NoticeVO [noticeNo=" + noticeNo + ", noticeSubject=" + noticeSubject + ", noticeContent="
+					+ noticeContent + ", noticeWriter=" + noticeWriter + ", noticeFilename=" + noticeFilename
+					+ ", noticeFileRename=" + noticeFileRename + ", noticeFilepath=" + noticeFilepath + ", noticeDate="
+					+ noticeDate + ", updateDate=" + updateDate + ", noticeCount=" + noticeCount + ", noticeYn="
+					+ noticeYn + ", uploadFile=" + uploadFile + "]";
+		}
+
+	
+
 
 	
 }
