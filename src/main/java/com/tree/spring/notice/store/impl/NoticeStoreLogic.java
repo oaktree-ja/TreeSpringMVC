@@ -1,6 +1,7 @@
 package com.tree.spring.notice.store.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
@@ -52,6 +53,12 @@ public class NoticeStoreLogic implements NoticeStore{
 	public int deleteNotice(SqlSession session, int noticeNo) {
 		int result = session.update("NoticeMapper.deleteNotice", noticeNo);
 		return result;
+	}
+
+	@Override
+	public List<NoticeVO> searchListByKeyword(SqlSession session, Map<String, String> paramMap) {
+		List<NoticeVO> searchList= session.selectList("NoticeMapper.searchListByKeyword",paramMap);
+		return searchList;
 	}
 	
 	

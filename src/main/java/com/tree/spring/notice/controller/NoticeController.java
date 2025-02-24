@@ -3,7 +3,9 @@ package com.tree.spring.notice.controller;
 import java.io.File;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
@@ -203,6 +205,27 @@ public class NoticeController {
 		}
 	}
 	
+	@RequestMapping(value="/notice/search", method=RequestMethod.GET)
+	public String showSearchList(@RequestParam("searchCondition")String searchCondition
+								,@RequestParam("searchKeyword")String searchKeyword
+								,Model model) {
+				//1.VO 만들기
+				//SearchVO search= new SearchVO(searchCondition, searchKeyword);
+				//2.HashMap사용하기
+			try {
+				Map<String, String>paramMap= new HashMap<String,String>();
+				paramMap.put("searchCondition",searchCondition);
+				paramMap.put("searchKeyword",searchKeyword);
+				List<NoticeVO> searchList = nService.searchListByKeyword(paramMap);
+				model.addAttribute("searchList",searchList);
+				return "notice/search";
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+				model.addAttribute("errorMsg",e.getMessage());
+				return "common/error";
+			}
+	}
 
 	
 	

@@ -42,7 +42,7 @@
   	<select id="selectList" resultMap="noticeResultMap">
   		SELECT * FROM NOTICE_TBL 
   		WHERE NOTICE_YN ='y'
-  		ORDER BY NOTICE_NO ASC
+  		ORDER BY NOTICE_NO DESC
   	</select>
   	
   	<select id="getTotalCount" resultType="_int">
@@ -55,4 +55,28 @@
 		AND NOTICE_YN ='y'		
   	</select>
   	
+  		<select id="searchListByKeyword" resultMap="noticeResultMap">
+  			SELECT * FROM NOTICE_TBL
+  			<where>
+  				<if test ="searchCondition =='writer'">
+  				NOTICE_WRITIER LIKE '%'||#{searchKeyword}||'%'
+  				</if>
+  				<if test ="searchCondition =='subject'">
+  				NOTICE_SUBJECT LIKE '%'||#{searchKeyword}||'%'
+  				</if>
+  				<if test ="searchCondition =='content'">
+  				 NOTICE_CONTENT LIKE '%'||#{searchKeyword}||'%'
+  				</if>
+  				<if test ="searchCondition =='all'">
+  				NOTICE_WRITIER LIKE '%'||#{searchKeyword}||'%'OR
+  				NOTICE_SUBJECT LIKE '%'||#{searchKeyword}||'%' OR
+  				 NOTICE_CONTENT LIKE '%'||#{searchKeyword}||'%'
+  				 
+  				</if>
+  				AND NOTICE_YN ='y'
+  			</where>
+			ORDER BY NOTICE_NO DESC
+  		</select>
+  		
+  		
   </mapper>

@@ -26,7 +26,7 @@
 				<th>작성일자</th>
 				<th>첨부파일</th>
 			</tr>
-			<c:forEach items="${nList }" var="notice" varStatus="i">
+			<c:forEach items="${searchList }" var="notice" varStatus="i">
 				<tr>
 					<td>${i.count }</td>
 					<td><a href ="/notice/detail?noticeNo=${notice.noticeNo }">${notice.noticeSubject}</a></td>

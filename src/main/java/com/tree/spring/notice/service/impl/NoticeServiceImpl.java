@@ -2,6 +2,7 @@ package com.tree.spring.notice.service.impl;
 
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +59,12 @@ public class NoticeServiceImpl implements NoticeService{
 	public int deleteNotice(int noticeNo) {
 		int result = nStore.deleteNotice(session, noticeNo);
 		return result;
+	}
+
+	@Override
+	public List<NoticeVO> searchListByKeyword(Map<String, String> paramMap) {
+		List<NoticeVO> searchList=nStore.searchListByKeyword(session,paramMap);
+		return searchList;
 	}
 
 }
