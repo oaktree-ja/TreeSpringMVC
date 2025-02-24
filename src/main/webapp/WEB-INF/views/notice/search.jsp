@@ -44,13 +44,13 @@
 			<tr>
 				<td colspan="5" align="center">
 					<c:if test="${startNavi ne 1}">
-					<a href="/notice/list?page=">이전</a>
+					<a href="/notice/search?searchCondition=${searchCondition}&searchKeyword=${searchKeyword}&page=${startNavi-1}">이전</a>
 					</c:if>
 					<c:forEach begin="${startNavi}" end="${endNavi}" var="p">
-						<a href="/notice/list?page=${p}">${p}</a>
+						<a href="/notice/search?searchCondition=${searchCondition}&searchKeyword=${searchKeyword}&page=${p}">${p}</a>
 					</c:forEach>	
 					<c:if test="${endNavi ne maxPage}">
-					<a href="/notice/list?page=${endNavi+1}">다음</a>
+					<a href="/notice/search?searchCondition=${searchCondition}&searchKeyword=${searchKeyword}&page=${endNavi+1}">다음</a>
 					</c:if>
 				</td>
 			
@@ -60,12 +60,12 @@
 					<form action=  "/notice/search"  method="get">
 						<select name="searchCondition">
 							<!--  select 태그에서 선택한 option 값은 사이값이 아니라 value 값이 전송됨 -->
-							<option value="all">전체</option>
-							<option value="writer">작성자</option>
-							<option value="title">제목</option>
-							<option value="content">내용</option>
+							<option value="all"<c:if test="${searchCondition eq 'all'}" >selected</c:if>>전체</option>
+							<option value="writer" <c:if test="${searchCondition eq 'writer'}" >selected</c:if>>작성자</option>
+							<option value="title" <c:if test="${searchCondition eq 'title'}" >selected</c:if>>제목</option>
+							<option value="content" <c:if test="${searchCondition eq 'content'}" >selected</c:if>>내용</option>
 						</select>
-						<input type="text" name="searchKeyword" placeholder="검색어를 입력하세요">
+						<input type="text" name="searchKeyword" placeholder="검색어를 입력하세요" value="${searchCondition}">
 						<input type="submit" value="검색">
 					</form>
 				</td>

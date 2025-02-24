@@ -12,6 +12,8 @@ public interface NoticeService {
 	List<NoticeVO> selectList(int currentPage);
 
 	int getTotalcount();
+	
+	int getTotalcount(Map<String, String> paramMap);
 
 	NoticeVO selectOneByNo(int noticeNo);
 
@@ -19,7 +21,9 @@ public interface NoticeService {
 
 	int deleteNotice(int noticeNo);
 
-	List<NoticeVO> searchListByKeyword(Map<String, String> paramMap);
+	List<NoticeVO> searchListByKeyword(Map<String, String> paramMap, int currentPage);
+
+	
 
 	
 	

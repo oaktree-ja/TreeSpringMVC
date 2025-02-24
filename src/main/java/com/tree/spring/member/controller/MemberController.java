@@ -16,6 +16,7 @@ import com.tree.spring.member.service.MemberService;
 import com.tree.spring.member.service.impl.MemberServiceImpl;
 
 @Controller
+@RequestMapping("/member")
 public class MemberController {
 	
 	@Autowired
@@ -26,11 +27,11 @@ public class MemberController {
 //		request.getRequestDispatcher("/WEB-INF/views/main.jsp").forward(req,res)
 		return "main";
 	}
-	@RequestMapping(value="/member/insert", method=RequestMethod.GET)
+	@RequestMapping(value="/insert", method=RequestMethod.GET)
 	public String memberInsertForm() {
 		return "member/insert";
 	}
-	@RequestMapping(value="/member/insert", method=RequestMethod.POST)
+	@RequestMapping(value="/insert", method=RequestMethod.POST)
 	public String memberInsert(
 			@RequestParam("memberId") String memberId
 			,@RequestParam("memberPw") String memberPw
@@ -64,7 +65,7 @@ public class MemberController {
 //		String memberAddress =request.getParameter("memberAddr");
 			
 	}
-	@RequestMapping(value="/member/login",method=RequestMethod.POST)
+	@RequestMapping(value="/login",method=RequestMethod.POST)
 	public String memberLogin(
 			@RequestParam("memberId") String memberId
 			,@RequestParam("memberPw") String memberPw
@@ -87,14 +88,14 @@ public class MemberController {
 				}
 				
 			}
-	@RequestMapping(value="/member/logout",method=RequestMethod.GET)		
+	@RequestMapping(value="/logout",method=RequestMethod.GET)		
 	public String memberLogout(HttpSession session) {
 		if(session !=null) {
 			session.invalidate();
 		}
 		return "redirect:/";
 	}
-	@RequestMapping(value="/member/detail",method=RequestMethod.GET)
+	@RequestMapping(value="/detail",method=RequestMethod.GET)
 	public String memberMyPage(HttpSession session, Model model) {
 		try {
 			String memberId =(String) session.getAttribute("memberId");
@@ -114,7 +115,7 @@ public class MemberController {
 			return "common/error";
 		}
 	}
-	@RequestMapping(value="/member/delete", method=RequestMethod.GET)
+	@RequestMapping(value="/delete", method=RequestMethod.GET)
 	public String memberDelete(HttpSession session, Model model) {
 		try {
 			String memberId = (String) session.getAttribute("memberId");
@@ -130,10 +131,10 @@ public class MemberController {
 			
 		} catch (Exception e) {
 			model.addAttribute("errorMsg",e.getMessage());
-			return "common/error";
+			return "error";
 		}
 	}
-	@RequestMapping(value="/member/update", method=RequestMethod.GET)
+	@RequestMapping(value="/update", method=RequestMethod.GET)
 	public String memberUpdateForm(HttpSession session, Model model) {
 		try {
 			String memberId = (String) session.getAttribute("memberId");;
@@ -150,7 +151,7 @@ public class MemberController {
 			return "common/error";
 		}
 	}
-	@RequestMapping(value="/member/update", method=RequestMethod.POST)
+	@RequestMapping(value="/update", method=RequestMethod.POST)
 	public String memberUpdate(@RequestParam("memberId")String memberId
 			,@RequestParam("memberPw")String memberPw
 			,@RequestParam("memberEmail")String memberEmail

@@ -30,13 +30,28 @@ public class NoticeStoreLogic implements NoticeStore{
 		List<NoticeVO> nList = session.selectList("NoticeMapper.selectList", null, rowBounds); 
 		return nList;
 	}
-
+	
+	@Override
+	public List<NoticeVO> searchListByKeyword(SqlSession session, Map<String, String> paramMap, int currentPage) {
+		int limit=10;
+		int offset =(currentPage-1)*limit;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		List<NoticeVO> searchList= session.selectList("NoticeMapper.searchListByKeyword",paramMap ,rowBounds);
+		return searchList;
+	}
+	
 	@Override
 	public int getTotalCount(SqlSession session) {
 		int totalCount = session.selectOne("NoticeMapper.getTotalCount");
 		return totalCount;
 	}
 
+	@Override
+	public int getTotalCount(SqlSession session, Map<String, String> paramMap) {
+		int totalCount = session.selectOne("NoticeMapper.getTotalCountBySearch",paramMap);
+		return totalCount;
+	}
+	
 	@Override
 	public NoticeVO selectOneByNo(SqlSession session, int noticeNo) {
 		NoticeVO notice = session.selectOne("NoticeMapper.selectOneByNo",noticeNo);
@@ -55,11 +70,9 @@ public class NoticeStoreLogic implements NoticeStore{
 		return result;
 	}
 
-	@Override
-	public List<NoticeVO> searchListByKeyword(SqlSession session, Map<String, String> paramMap) {
-		List<NoticeVO> searchList= session.selectList("NoticeMapper.searchListByKeyword",paramMap);
-		return searchList;
-	}
+	
+
+	
 	
 	
 	

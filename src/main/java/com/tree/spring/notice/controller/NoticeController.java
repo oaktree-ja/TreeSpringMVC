@@ -206,9 +206,11 @@ public class NoticeController {
 	}
 	
 	@RequestMapping(value="/notice/search", method=RequestMethod.GET)
-	public String showSearchList(@RequestParam("searchCondition")String searchCondition
-								,@RequestParam("searchKeyword")String searchKeyword
-								,Model model) {
+	public String showSearchList(
+			 @RequestParam("searchCondition")String searchCondition
+			,@RequestParam("searchKeyword")String searchKeyword
+			,@RequestParam(value="page", defaultValue="1")int currentPage
+			,Model model) {
 				//1.VO 만들기
 				//SearchVO search= new SearchVO(searchCondition, searchKeyword);
 				//2.HashMap사용하기
@@ -216,9 +218,36 @@ public class NoticeController {
 				Map<String, String>paramMap= new HashMap<String,String>();
 				paramMap.put("searchCondition",searchCondition);
 				paramMap.put("searchKeyword",searchKeyword);
-				List<NoticeVO> searchList = nService.searchListByKeyword(paramMap);
+				List<NoticeVO> searchList = nService.searchListByKeyword(paramMap, currentPage);
+				int totalCount=nService.getTotalcount(paramMap);
+				int boardLimit =10;
+				int maxPage =0;
+				if(totalCount % boardLimit !=0) {
+					maxPage = totalCount / boardLimit +1;
+				}else {
+					maxPage = totalCount/boardLimit;
+				}
+				int naviLimit =5;
+				//page1-5 statNavi->1, endNavi->5
+				//page6-10 statNavi->6, endNavi->10
+				//page11-15 statNavi->11, endNavi->15
+				
+				int startNavi=((currentPage-1)/naviLimit)*naviLimit+1;
+				int endNavi=(startNavi-1)+naviLimit;
+				if(endNavi >maxPage) {
+					endNavi = maxPage;
+				}
 				model.addAttribute("searchList",searchList);
+				model.addAttribute("maxPage",maxPage);
+				model.addAttribute("startNavi",startNavi);
+				model.addAttribute("endNavi",endNavi);
+				model.addAttribute("searchCondition",searchCondition);
+				model.addAttribute("searchKeyword",searchKeyword);
 				return "notice/search";
+				
+				
+				
+				
 			} catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();
@@ -226,6 +255,8 @@ public class NoticeController {
 				return "common/error";
 			}
 	}
+	
+	
 
 	
 	

@@ -22,7 +22,9 @@ public interface NoticeStore {
 
 	int deleteNotice(SqlSession session, int noticeNo);
 
-	List<NoticeVO> searchListByKeyword(SqlSession session, Map<String, String> paramMap);
+	List<NoticeVO> searchListByKeyword(SqlSession session, Map<String, String> paramMap, int currentPage);
+
+	int getTotalCount(SqlSession session, Map<String, String> paramMap);
 
 	
 	

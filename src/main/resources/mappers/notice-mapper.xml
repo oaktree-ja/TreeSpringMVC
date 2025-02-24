@@ -18,65 +18,94 @@
   		<result property ="noticeYn" column="NOTICE_YN"/>
   		
   	</resultMap>
-  	<insert id="insertNotice">
-  		insert into notice_tbl
-  		values(seq_notice_no.nextval ,#{noticeSubject},#{noticeContent},#{noticeWriter},#{noticeFilename},#{noticeFileRename},#{noticeFilepath},
-  		default,default,default,default)
-  	</insert>
-  	<update id= "updateNotice">
-  		UPDATE NOTICE_TBL
-  		SET NOTICE_SUBJECT = #{noticeSubject}
-  		,NOTICE_CONTENT=#{noticeContent}
-  		,NOTICE_FILENAME=#{noticeFilename}
-  		,NOTICE_FILEPATH=#{noticeFilepath}
-  		,UPDATE_DATE =DEFAULT
-  		WHERE NOTICE_NO =#{noticeNo}
-  	</update>
+					  	<select id="selectList" resultMap="noticeResultMap">
+					  		SELECT * FROM NOTICE_TBL 
+					  		WHERE NOTICE_YN ='y'
+					  		ORDER BY NOTICE_NO DESC
+					  	</select>
   	
-  	<update id="deleteNotice">
-  		UPDATE NOTICE_TBL
-  		SET NOTICE_YN ='n'
-  		WHERE NOTICE_NO =#{noticeNo}
-  	</update>
+		  			<select id="searchListByKeyword" resultMap="noticeResultMap">
+			  			SELECT * FROM NOTICE_TBL
+			  			<where>
+			  				<if test="searchCondition =='writer'">
+			  				NOTICE_WRITER LIKE '%'||#{searchKeyword}||'%'
+			  				</if>
+		  				<if test="searchCondition =='subject'">
+		  				NOTICE_SUBJECT LIKE '%'||#{searchKeyword}||'%'
+		  				</if>
+		  				<if test="searchCondition =='content'">
+		  				 NOTICE_CONTENT LIKE '%'||#{searchKeyword}||'%'
+		  				</if>
+		  				<if test="searchCondition =='all'">
+		  				NOTICE_WRITER LIKE '%'||#{searchKeyword}||'%'OR
+		  				NOTICE_SUBJECT LIKE '%'||#{searchKeyword}||'%' OR
+		  				 NOTICE_CONTENT LIKE '%'||#{searchKeyword}||'%'
+		  				 
+		  				</if>
+		  				
+		  				AND NOTICE_YN ='y'
+		  			</where>
+					ORDER BY NOTICE_NO DESC
+		  		</select>
+  		
+		  		<insert id="insertNotice">
+		  		insert into notice_tbl
+		  		values(seq_notice_no.nextval ,#{noticeSubject},#{noticeContent},#{noticeWriter},#{noticeFilename},#{noticeFileRename},#{noticeFilepath},
+		  		default,default,default,default)
+		  		</insert>
+			  	<update id= "updateNotice">
+			  		UPDATE NOTICE_TBL
+			  		SET NOTICE_SUBJECT = #{noticeSubject}
+			  		,NOTICE_CONTENT=#{noticeContent}
+			  		,NOTICE_FILENAME=#{noticeFilename}
+			  		,NOTICE_FILEPATH=#{noticeFilepath}
+			  		,UPDATE_DATE =DEFAULT
+			  		WHERE NOTICE_NO =#{noticeNo}
+			  	</update>
+		  	
+			  	<update id="deleteNotice">
+			  		UPDATE NOTICE_TBL
+			  		SET NOTICE_YN ='n'
+			  		WHERE NOTICE_NO =#{noticeNo}
+			  	</update>
   	
-  	<select id="selectList" resultMap="noticeResultMap">
-  		SELECT * FROM NOTICE_TBL 
-  		WHERE NOTICE_YN ='y'
-  		ORDER BY NOTICE_NO DESC
-  	</select>
   	
-  	<select id="getTotalCount" resultType="_int">
-		SELECT COUNT(*) FROM NOTICE_TBL 
-		WHERE NOTICE_YN ='y'		
-  	</select>
-  	<select id="selectOneByNo" resultMap="noticeResultMap">
-		SELECT * FROM NOTICE_TBL 
-		WHERE NOTICE_NO=#{noticeNo}
-		AND NOTICE_YN ='y'		
-  	</select>
   	
-  		<select id="searchListByKeyword" resultMap="noticeResultMap">
-  			SELECT * FROM NOTICE_TBL
-  			<where>
-  				<if test ="searchCondition =='writer'">
-  				NOTICE_WRITIER LIKE '%'||#{searchKeyword}||'%'
-  				</if>
-  				<if test ="searchCondition =='subject'">
-  				NOTICE_SUBJECT LIKE '%'||#{searchKeyword}||'%'
-  				</if>
-  				<if test ="searchCondition =='content'">
-  				 NOTICE_CONTENT LIKE '%'||#{searchKeyword}||'%'
-  				</if>
-  				<if test ="searchCondition =='all'">
-  				NOTICE_WRITIER LIKE '%'||#{searchKeyword}||'%'OR
-  				NOTICE_SUBJECT LIKE '%'||#{searchKeyword}||'%' OR
-  				 NOTICE_CONTENT LIKE '%'||#{searchKeyword}||'%'
-  				 
-  				</if>
-  				AND NOTICE_YN ='y'
-  			</where>
-			ORDER BY NOTICE_NO DESC
-  		</select>
+		  	<select id="getTotalCount" resultType="_int">
+				SELECT COUNT(*) FROM NOTICE_TBL 
+				WHERE NOTICE_YN ='y'		
+		  	</select>
+		  	
+		  	<select id="selectOneByNo" resultMap="noticeResultMap">
+				SELECT * FROM NOTICE_TBL 
+				WHERE NOTICE_NO=#{noticeNo}
+				AND NOTICE_YN ='y'		
+		  	</select>
+  	
+  			<select id="getTotalCountBySearch" resultType="_int">
+				SELECT COUNT(*) FROM NOTICE_TBL 
+					<where>
+			  				<if test="searchCondition =='writer'">
+			  				NOTICE_WRITER LIKE '%'||#{searchKeyword}||'%'
+			  				</if>
+		  				<if test="searchCondition =='subject'">
+		  				NOTICE_SUBJECT LIKE '%'||#{searchKeyword}||'%'
+		  				</if>
+		  				<if test="searchCondition =='content'">
+		  				 NOTICE_CONTENT LIKE '%'||#{searchKeyword}||'%'
+		  				</if>
+		  				<if test="searchCondition =='all'">
+		  				NOTICE_WRITER LIKE '%'||#{searchKeyword}||'%'OR
+		  				NOTICE_SUBJECT LIKE '%'||#{searchKeyword}||'%' OR
+		  				 NOTICE_CONTENT LIKE '%'||#{searchKeyword}||'%'
+		  				 
+		  				</if>
+		  				
+		  				AND NOTICE_YN ='y'
+		  			</where>	
+		  	</select>
+  	
+  		
   		
   		
   </mapper>

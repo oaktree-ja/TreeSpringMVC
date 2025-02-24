@@ -42,6 +42,12 @@ public class NoticeServiceImpl implements NoticeService{
 		int totalCount = nStore.getTotalCount(session);
 		return totalCount;
 	}
+	
+	@Override
+	public int getTotalcount(Map<String, String> paramMap) {
+		int totalCount = nStore.getTotalCount(session,paramMap);
+		return totalCount;
+	}
 
 	@Override
 	public NoticeVO selectOneByNo(int noticeNo) {
@@ -62,9 +68,11 @@ public class NoticeServiceImpl implements NoticeService{
 	}
 
 	@Override
-	public List<NoticeVO> searchListByKeyword(Map<String, String> paramMap) {
-		List<NoticeVO> searchList=nStore.searchListByKeyword(session,paramMap);
+	public List<NoticeVO> searchListByKeyword(Map<String, String> paramMap, int currentPage) {
+		List<NoticeVO> searchList=nStore.searchListByKeyword(session,paramMap , currentPage);
 		return searchList;
 	}
+
+	
 
 }
