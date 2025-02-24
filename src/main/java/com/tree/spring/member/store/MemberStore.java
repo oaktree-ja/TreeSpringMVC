@@ -2,6 +2,9 @@ package com.tree.spring.member.store;
 
 import org.apache.ibatis.session.SqlSession;
 
+import com.tree.spring.member.controller.dto.JoinRequest;
+import com.tree.spring.member.controller.dto.LoginRequest;
+import com.tree.spring.member.controller.dto.ModifyRequest;
 import com.tree.spring.member.domain.MemberVO;
 
 public interface MemberStore {
@@ -11,14 +14,14 @@ public interface MemberStore {
 	 * @param MemberVO
 	 * @return int
 	 */
-	int insertMember(SqlSession session, MemberVO member);
+	int insertMember(SqlSession session, JoinRequest member);
 	/**
 	 * 회원 정보 수정 Store
 	 * @param SqlSession
 	 * @param MemberVO
 	 * @return int
 	 */
-	int updateMember(SqlSession session,MemberVO member);
+	int updateMember(SqlSession session,ModifyRequest member);
 	/**
 	 *회원 정보 삭제 Store
 	 * @param SqlSession
@@ -32,7 +35,7 @@ public interface MemberStore {
 	 * @param MemberVO
 	 * @return MemberVO
 	 */
-	MemberVO selectOneByLogin(SqlSession session,MemberVO member);
+	MemberVO selectOneByLogin(SqlSession session,LoginRequest member);
 	/**
 	 * 회원 정보 아이디로 조회 Store
 	 *  @param SqlSession

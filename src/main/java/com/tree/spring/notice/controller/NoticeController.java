@@ -13,7 +13,9 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,6 +25,7 @@ import com.tree.spring.notice.domain.NoticeVO;
 import com.tree.spring.notice.service.NoticeService;
 
 @Controller
+@RequestMapping("/notice")
 public class NoticeController {
 	
 	private NoticeService nService;
@@ -31,13 +34,13 @@ public class NoticeController {
 		this.nService=nService;
 		
 	}
-	
-	@RequestMapping(value="/notice/insert", method=RequestMethod.GET)
+	@GetMapping("/insert")
+	//@RequestMapping(value="/notice/insert", method=RequestMethod.GET)
 	public String showNoticeForm() {
 		return "notice/insert";
 	}
-	
-	@RequestMapping(value="/notice/insert", method=RequestMethod.POST)
+	@PostMapping("/insert")
+	//@RequestMapping(value="/notice/insert", method=RequestMethod.POST)
 	public String noticeInsert(@RequestParam("noticeSubject") String noticeSubject
 			, @RequestParam("noticeContent") String noticeContent
 			, @RequestParam("uploadFile") MultipartFile uploadFile
@@ -81,7 +84,8 @@ public class NoticeController {
 		}
 		
 	}
-	@RequestMapping(value="/notice/update",method=RequestMethod.GET)
+	@GetMapping("/update")
+	//@RequestMapping(value="/notice/update",method=RequestMethod.GET)
 	public String showModifyForm(
 			@RequestParam("noticeNo")int noticeNo
 			,Model model) {
@@ -96,8 +100,8 @@ public class NoticeController {
 		}
 		
 	}
-	
-	@RequestMapping(value="/notice/update",method=RequestMethod.POST)
+	@PostMapping("/update")
+	//@RequestMapping(value="/notice/update",method=RequestMethod.POST)
 	public String updateNotice(@RequestParam("noticeNo") int noticeNo
 			,@RequestParam("noticeSubject") String noticeSubject
 			,@RequestParam("noticeContent") String noticeContent
@@ -131,8 +135,8 @@ public class NoticeController {
 			return "common/error";
 		}
 	}
-	
-	@RequestMapping(value="/notice/delete",method=RequestMethod.GET)
+	@GetMapping("/delete")
+	//@RequestMapping(value="/notice/delete",method=RequestMethod.GET)
 	public String deleteNotice(
 			@RequestParam("noticeNo")int noticeNo
 			,Model model) {
@@ -147,8 +151,8 @@ public class NoticeController {
 		
 	}
 	
-	
-	@RequestMapping(value="/notice/list", method=RequestMethod.GET)
+	@GetMapping("/list")
+	//@RequestMapping(value="/notice/list", method=RequestMethod.GET)
 	public String showNoticeList(
 			@RequestParam(value="page",defaultValue="1")int currentPage
 			,Model model) {
@@ -190,7 +194,8 @@ public class NoticeController {
 		}
 	}
 	
-	@RequestMapping(value="/notice/detail", method=RequestMethod.GET)
+	@GetMapping("/detail")
+	//@RequestMapping(value="/notice/detail", method=RequestMethod.GET)
 	public String showNoticeDetail(
 			@RequestParam("noticeNo") int noticeNo
 			,Model model) {
@@ -204,8 +209,8 @@ public class NoticeController {
 			return "common/error";
 		}
 	}
-	
-	@RequestMapping(value="/notice/search", method=RequestMethod.GET)
+	@GetMapping("/search")
+	//@RequestMapping(value="/notice/search", method=RequestMethod.GET)
 	public String showSearchList(
 			 @RequestParam("searchCondition")String searchCondition
 			,@RequestParam("searchKeyword")String searchKeyword
@@ -255,9 +260,6 @@ public class NoticeController {
 				return "common/error";
 			}
 	}
-	
-	
 
-	
 	
 }

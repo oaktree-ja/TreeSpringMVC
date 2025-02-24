@@ -7,10 +7,16 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.tree.spring.member.controller.dto.JoinRequest;
+import com.tree.spring.member.controller.dto.LoginRequest;
+import com.tree.spring.member.controller.dto.ModifyRequest;
 import com.tree.spring.member.domain.MemberVO;
 import com.tree.spring.member.service.MemberService;
 import com.tree.spring.member.service.impl.MemberServiceImpl;
@@ -27,56 +33,33 @@ public class MemberController {
 //		request.getRequestDispatcher("/WEB-INF/views/main.jsp").forward(req,res)
 		return "main";
 	}
-	@RequestMapping(value="/insert", method=RequestMethod.GET)
+	@GetMapping("/insert")
 	public String memberInsertForm() {
 		return "member/insert";
 	}
-	@RequestMapping(value="/insert", method=RequestMethod.POST)
+	@PostMapping("/insert")
 	public String memberInsert(
-			@RequestParam("memberId") String memberId
-			,@RequestParam("memberPw") String memberPw
-			,@RequestParam("memberName") String memberName
-			,@RequestParam("memberAge") String memberAge
-			,@RequestParam("memberGender") String memberGender
-			,@RequestParam("memberEmail") String memberEmail
-			,@RequestParam("memberPhone") String memberPhone
-			,@RequestParam("memberAddress") String memberAddress
+			@ModelAttribute JoinRequest member
 			,HttpServletRequest request, HttpServletResponse response) {
-		MemberVO member = new MemberVO(memberId, memberPw, memberName, memberAge, memberGender, memberEmail, memberPhone, memberAddress);	
-		//MemberServiceImpl mService = new MemberServiceImpl(); 강한 결합
-		
 		int result = mService.insertMember(member);
 			if(result >0) {
 				//성공시 메인페이지 (로그인 페이지) 로 이동
-//				response.sendRedirect("/");
 				return "redirect:/";
 				
 			}else {
 				return "common/error";
 			}
-		
-//		String memberId= request.getParameter("memberId");
-//		String memberPw = request.getParameter("memberPw");
-//		String memberName =request.getParameter("memberName");
-//		int memberAge =Integer.parseInt(request.getParameter("memberAge"));
-//		String memberGender =request.getParameter("memberGender");		
-//		String memberEmail =request.getParameter("memberEmail");
-//		String memberPhone =request.getParameter("memberPhone");
-//		String memberAddress =request.getParameter("memberAddr");
-			
 	}
-	@RequestMapping(value="/login",method=RequestMethod.POST)
+	@PostMapping("/login")
 	public String memberLogin(
-			@RequestParam("memberId") String memberId
-			,@RequestParam("memberPw") String memberPw
+			@ModelAttribute LoginRequest member
 			,HttpSession session
 			,Model model){
 				try {
-					MemberVO member = new MemberVO(memberId, memberPw);
-					member = mService.selectOneByLogin(member);
-					if(member !=null) {
-						session.setAttribute("memberName", member.getMemberName());
-						session.setAttribute("memberId", member.getMemberId());
+					MemberVO member1 = mService.selectOneByLogin(member);
+					if(member1 !=null) {
+						session.setAttribute("memberName", member1.getMemberName());
+						session.setAttribute("memberId", member1.getMemberId());
 						return "redirect:/";
 					}else {
 						model.addAttribute("errorMsg","존재하지 않는 정보입니다");
@@ -88,22 +71,20 @@ public class MemberController {
 				}
 				
 			}
-	@RequestMapping(value="/logout",method=RequestMethod.GET)		
+	@GetMapping("/logout")
 	public String memberLogout(HttpSession session) {
 		if(session !=null) {
 			session.invalidate();
 		}
 		return "redirect:/";
 	}
-	@RequestMapping(value="/detail",method=RequestMethod.GET)
+	@GetMapping("/detail")
 	public String memberMyPage(HttpSession session, Model model) {
 		try {
 			String memberId =(String) session.getAttribute("memberId");
 			MemberVO member =mService.selectOneById(memberId);
 			if(member !=null) {
-				//request.setAttribute("member",member); 원래는 이렇게 받았었는데  model을 활용하여 다른 방식으로 받는다 
 				model.addAttribute("member",member); //기능을 아래 request.getRequestDispatcher와 동일하게 하는 것 
-				//request.getRequestDispatcher("/WEB-INF/views/member/detail.jsp").forward(req,res);
 				return "member/detail";
 			}else {
 				model.addAttribute("errorMsg","존재하지 않는 정보입니다");
@@ -115,7 +96,7 @@ public class MemberController {
 			return "common/error";
 		}
 	}
-	@RequestMapping(value="/delete", method=RequestMethod.GET)
+	@GetMapping("/delete")
 	public String memberDelete(HttpSession session, Model model) {
 		try {
 			String memberId = (String) session.getAttribute("memberId");
@@ -134,7 +115,7 @@ public class MemberController {
 			return "error";
 		}
 	}
-	@RequestMapping(value="/update", method=RequestMethod.GET)
+	@GetMapping("/update")
 	public String memberUpdateForm(HttpSession session, Model model) {
 		try {
 			String memberId = (String) session.getAttribute("memberId");;
@@ -151,15 +132,11 @@ public class MemberController {
 			return "common/error";
 		}
 	}
-	@RequestMapping(value="/update", method=RequestMethod.POST)
-	public String memberUpdate(@RequestParam("memberId")String memberId
-			,@RequestParam("memberPw")String memberPw
-			,@RequestParam("memberEmail")String memberEmail
-			,@RequestParam("memberPhone")String memberPhone
-			,@RequestParam("memberAddress")String memberAddress
+	@PostMapping("/update")
+	public String memberUpdate(
+			@ModelAttribute ModifyRequest member
 			,Model model) {
 		try {
-			MemberVO member= new MemberVO(memberId, memberPw,memberEmail,memberPhone,memberAddress);
 			int result = mService.updateMember(member);
 			if(result>0) {
 				return"redirect:/member/detail";

@@ -21,10 +21,13 @@
 	<c:if test="${memberId eq null || memberId eq '' }">
 	<form action="/member/login" method="POST">
 		ID:<input type="text" name="memberId"><br>
-		PW:<input type="password" name="memberPw">
+		PW:<input type="password" name="memberPw"><br><br>
 		<input type="submit" value="로그인">
 	</form>
-		
+		<form action ="/member/insert" method="get">
+		<button type ="submit" > 회원가입</button>
+	</form>
 	</c:if>
+	
 </body>
 </html>
