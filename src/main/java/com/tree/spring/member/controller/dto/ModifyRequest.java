@@ -1,7 +1,5 @@
 package com.tree.spring.member.controller.dto;
 
-import org.springframework.web.bind.annotation.RequestParam;
-
 public class ModifyRequest {
 	private String memberId;
 	private String memberPw;

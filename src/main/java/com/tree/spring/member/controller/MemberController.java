@@ -78,6 +78,7 @@ public class MemberController {
 		}
 		return "redirect:/";
 	}
+	
 	@GetMapping("/detail")
 	public String memberMyPage(HttpSession session, Model model) {
 		try {
@@ -96,6 +97,7 @@ public class MemberController {
 			return "common/error";
 		}
 	}
+	
 	@GetMapping("/delete")
 	public String memberDelete(HttpSession session, Model model) {
 		try {
