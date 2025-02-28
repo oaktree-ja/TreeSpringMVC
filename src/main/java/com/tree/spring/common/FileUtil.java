@@ -32,7 +32,7 @@ public class FileUtil {
 			String ext = noticeFilename.substring(noticeFilename.lastIndexOf(".")+1);
 			// 파일이름 변경완료
 			noticeFileRename = transStr + "." + ext;
-			noticeFilepath = "/resources/nUploadFiles/"+noticeFileRename;
+			noticeFilepath = "/resources/"+folderName+"/"+noticeFileRename;;
 			String folderPath = session.getServletContext().getRealPath("/resources/"+folderName);
 			String savePath =  folderPath + "\\" + noticeFileRename;
 			uploadFile.transferTo(new File(savePath));
